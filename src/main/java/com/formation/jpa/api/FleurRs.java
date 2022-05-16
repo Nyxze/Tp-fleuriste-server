@@ -15,49 +15,43 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
-import com.formation.jpa.bean.Plante;
-import com.formation.jpa.bll.PlanteManager;
+import com.formation.jpa.bean.Fleur;
+import com.formation.jpa.bll.FleurManager;
 
-@Path("/plantes")
+
+@Path("/fleurs")
 @Singleton
-public class PlanteRs {
+public class FleurRs {
 
-	private PlanteManager planteManager;
+	private FleurManager FleurManager;
 
-	public PlanteRs() {
-		planteManager = new PlanteManager();
+	public FleurRs() {
+		FleurManager = new FleurManager();
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Plante> getPlantes() {
-		return planteManager.listePlantes();
-	}
-	
-	@GET
-	@Produces(MediaType.APPLICATION_JSON)
-	public Plante getPlanteById(int id) {
-		return planteManager.trouverPlante(id);
+	public List<Fleur> getSaison() {
+		return FleurManager.listeFleurs();
 	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void postPlante(Plante p) {
-		System.out.println(p.toString());
+	public void postFleur(Fleur f) {
 		try {
-			System.out.println("Ajout de " + p);
-			planteManager.ajoutPlante(p);
+			System.out.println("Ajout de " + f);
+			FleurManager.ajoutFleur(f);
 		} catch (Exception e) {
-			System.out.println(p.toString());
+			System.out.println(f.toString());
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
 	}
 
 	@DELETE
 	@Path("/{id}")
-	public void removePlante(@PathParam("id") int id) {
+	public void removeFleur(@PathParam("id") int id) {
 		try {
-			planteManager.supprimerPlante(id);
+			FleurManager.supprimerFleur(id);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
@@ -66,10 +60,10 @@ public class PlanteRs {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-	public void putLivre(Plante s, @PathParam("id") int id) {
+	public void putFleur(Fleur f, @PathParam("id") int id) {
 		try {
-			s.setId(id);
-			planteManager.modifierPlante(s);
+			f.setId(id);
+			FleurManager.modifierFleur(f);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}

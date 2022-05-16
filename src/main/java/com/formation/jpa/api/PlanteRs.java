@@ -15,56 +15,56 @@ import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.formation.jpa.bean.Plante;
 import com.formation.jpa.bean.Saison;
+import com.formation.jpa.bll.PlanteManager;
 import com.formation.jpa.bll.SaisonManager;
-@Path("/saisons")
+
+@Path("/plantes")
 @Singleton
-public class SaisonRs {
-	
-	private SaisonManager saisonManager;
-	
-	public SaisonRs() {
-		saisonManager = new SaisonManager();
+public class PlanteRs {
+
+	private PlanteManager planteManager;
+
+	public PlanteRs() {
+		planteManager = new PlanteManager();
 	}
-	
+
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Saison> getSaison(){
-		return saisonManager.listeSaisons();
+	public List<Plante> getSaison() {
+		return planteManager.listePlantes();
 	}
-	
-	
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void postSaison(Saison s) {
+	public void postPlante(Plante p) {
 		try {
-			System.out.println("Ajout de " + s);
-			saisonManager.ajoutSaison(s);
+			System.out.println("Ajout de " + p);
+			planteManager.ajoutPlante(p);
 		} catch (Exception e) {
-			System.out.println(s.toString());
+			System.out.println(p.toString());
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
 	}
-	
 
 	@DELETE
 	@Path("/{id}")
-	public void removeSaison(@PathParam("id") int id) {
+	public void removePlante(@PathParam("id") int id) {
 		try {
-			saisonManager.supprimerSaison(id);
+			planteManager.supprimerPlante(id);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
 	}
-	
+
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-	public void putSaison(Saison s, @PathParam("id") int id) {
+	public void putPlante(Plante s, @PathParam("id") int id) {
 		try {
 			s.setId(id);
-			saisonManager.modifierSaison(s);
+			planteManager.modifierPlante(s);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}

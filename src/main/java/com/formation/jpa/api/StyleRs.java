@@ -62,7 +62,7 @@ public class StyleRs {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-	public void putLivre(Style s, @PathParam("id") int id) {
+	public void putStyle(Style s, @PathParam("id") int id) {
 		try {
 			s.setId(id);
 			stylemanager.modifierStyle(s);
