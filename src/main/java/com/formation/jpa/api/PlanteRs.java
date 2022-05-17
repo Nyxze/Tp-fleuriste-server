@@ -16,9 +16,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.formation.jpa.bean.Plante;
-import com.formation.jpa.bean.Saison;
 import com.formation.jpa.bll.PlanteManager;
-import com.formation.jpa.bll.SaisonManager;
 
 @Path("/plantes")
 @Singleton
@@ -34,6 +32,13 @@ public class PlanteRs {
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Plante> getSaison() {
 		return planteManager.listePlantes();
+	}
+	
+	@GET
+	@Path("/{id}")
+	@Produces(MediaType.APPLICATION_JSON)
+	public Plante getOnePlante(@PathParam("id") int id ) {
+		return planteManager.trouverPlante(id);
 	}
 
 	@POST

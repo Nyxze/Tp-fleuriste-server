@@ -24,6 +24,9 @@ public class SaisonDaoImpl implements SaisonDao {
 			et.rollback();
 			throw e;
 		}
+		finally {
+			em.close();
+		}
 	}
 
 	public void delete(Saison s) throws Exception{
@@ -52,6 +55,9 @@ public class SaisonDaoImpl implements SaisonDao {
 			et.rollback();
 			throw e;
 		}
+		finally {
+			em.close();
+		}
 	}
 	
 	public void update(List<Saison> listeSaison) throws Exception{
@@ -67,6 +73,9 @@ public class SaisonDaoImpl implements SaisonDao {
 		} catch (Exception e) {
 			et.rollback();
 			throw e;
+		}
+		finally {
+			em.close();
 		}
 	}
 	

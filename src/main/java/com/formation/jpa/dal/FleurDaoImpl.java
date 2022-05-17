@@ -14,6 +14,7 @@ public class FleurDaoImpl implements FleurDao{
 
 	
 	public void add(Fleur f) throws Exception{
+		
 		EntityManager em = DAOUtil.getEntityManager();
 		EntityTransaction et = em.getTransaction();
 		et.begin();
@@ -21,8 +22,12 @@ public class FleurDaoImpl implements FleurDao{
 			em.persist(f);
 			et.commit();
 		} catch (Exception e) {
+			e.printStackTrace();
 			et.rollback();
 			throw e;
+		}
+		finally {
+			em.close();
 		}
 	}
 
@@ -39,6 +44,9 @@ public class FleurDaoImpl implements FleurDao{
 			et.rollback();
 			throw e;
 		}
+		finally {
+			em.close();
+		}
 	}
 
 	public  void update(Fleur f) throws Exception{
@@ -51,6 +59,9 @@ public class FleurDaoImpl implements FleurDao{
 		} catch (Exception e) {
 			et.rollback();
 			throw e;
+		}
+		finally {
+			em.close();
 		}
 	}
 	
@@ -67,6 +78,9 @@ public class FleurDaoImpl implements FleurDao{
 		} catch (Exception e) {
 			et.rollback();
 			throw e;
+		}
+		finally {
+			em.close();
 		}
 	}
 	

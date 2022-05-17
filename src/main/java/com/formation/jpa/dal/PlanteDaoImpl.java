@@ -24,6 +24,9 @@ public class PlanteDaoImpl implements PlanteDao{
 			et.rollback();
 			throw e;
 		}
+		finally {
+			em.close();
+		}
 	}
 
 	public void delete(Plante s) throws Exception{
@@ -39,6 +42,9 @@ public class PlanteDaoImpl implements PlanteDao{
 			et.rollback();
 			throw e;
 		}
+		finally {
+			em.close();
+		}
 	}
 
 	public  void update(Plante s) throws Exception{
@@ -51,6 +57,9 @@ public class PlanteDaoImpl implements PlanteDao{
 		} catch (Exception e) {
 			et.rollback();
 			throw e;
+		}
+		finally {
+			em.close();
 		}
 	}
 	
@@ -67,6 +76,9 @@ public class PlanteDaoImpl implements PlanteDao{
 		} catch (Exception e) {
 			et.rollback();
 			throw e;
+		}
+		finally {
+			em.close();
 		}
 	}
 	

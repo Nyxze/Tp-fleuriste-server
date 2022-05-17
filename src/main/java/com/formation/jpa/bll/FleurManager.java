@@ -46,9 +46,7 @@ public class FleurManager {
 	}
 	
 	public void supprimerFleur(int id) throws Exception{
-		System.out.println(id);
 		Fleur f = dao.findById(id);
-		System.out.println(f.toString());
 		dao.delete(f);
 	}
 	

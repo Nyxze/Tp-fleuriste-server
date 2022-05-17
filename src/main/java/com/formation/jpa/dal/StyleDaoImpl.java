@@ -24,6 +24,9 @@ public class StyleDaoImpl implements StyleDao{
 			et.rollback();
 			throw e;
 		}
+		finally {
+			em.close();
+		}
 	}
 
 	public void delete(Style s) throws Exception{
@@ -39,6 +42,9 @@ public class StyleDaoImpl implements StyleDao{
 			et.rollback();
 			throw e;
 		}
+		finally {
+			em.close();
+		}
 	}
 
 	public  void update(Style s) throws Exception{
@@ -51,6 +57,9 @@ public class StyleDaoImpl implements StyleDao{
 		} catch (Exception e) {
 			et.rollback();
 			throw e;
+		}
+		finally {
+			em.close();
 		}
 	}
 	
@@ -67,6 +76,9 @@ public class StyleDaoImpl implements StyleDao{
 		} catch (Exception e) {
 			et.rollback();
 			throw e;
+		}
+		finally {
+			em.close();
 		}
 	}
 	

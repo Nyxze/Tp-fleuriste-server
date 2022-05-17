@@ -16,48 +16,47 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.formation.jpa.bean.Bouquet;
-import com.formation.jpa.bean.Fleur;
-import com.formation.jpa.bll.FleurManager;
+import com.formation.jpa.bll.BouquetManager;
 
 
-@Path("/fleurs")
+@Path("/bouquets")
 @Singleton
-public class FleurRs {
+public class BouquetRs {
 
-	private FleurManager FleurManager;
+	private BouquetManager BouquetManager;
 
-	public FleurRs() {
-		FleurManager = new FleurManager();
+	public BouquetRs() {
+		BouquetManager = new BouquetManager();
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Fleur> getAllFleurs() {
-		return FleurManager.listeFleurs();
+	public List<Bouquet> getAllBouquets() {
+		return BouquetManager.listeBouquets();
 	}
-
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Fleur getOneFleur(@PathParam("id") int id ) {
-		return FleurManager.trouverFleur(id);
+	public Bouquet getOneBouquet(@PathParam("id") int id ) {
+		return BouquetManager.trouverBouquet(id);
 	}
+
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void postFleur(Fleur f) {
+	public void postBouquet(Bouquet b) {
 		try {
-			FleurManager.ajoutFleur(f);
+			BouquetManager.ajoutBouquet(b);
 		} catch (Exception e) {
-			System.out.println(f.toString());
+			System.out.println(b.toString());
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
 	}
 
 	@DELETE
 	@Path("/{id}")
-	public void removeFleur(@PathParam("id") int id) {
+	public void removeBouquet(@PathParam("id") int id) {
 		try {
-			FleurManager.supprimerFleur(id);
+			BouquetManager.supprimerBouquet(id);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
@@ -66,12 +65,14 @@ public class FleurRs {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-	public void putFleur(Fleur f, @PathParam("id") int id) {
+	public void putBouquet(Bouquet b, @PathParam("id") int id) {
 		try {
-			f.setId(id);
-			FleurManager.modifierFleur(f);
+			b.setId(id);
+			BouquetManager.modifierBouquet(b);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
 	}
+	
+	
 }

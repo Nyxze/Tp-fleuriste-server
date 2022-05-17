@@ -40,6 +40,11 @@ public class Fleur extends Product {
 		this.color = color;
 	}
 	
+	@Override
+	public String toString() {
+		return "Fleur [season=" + season + ", color=" + color + "]";
+	}
+	
 	
 	
 	

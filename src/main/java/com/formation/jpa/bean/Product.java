@@ -16,7 +16,6 @@ public abstract class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
-	
 
 	private String name;
 	private float price;
@@ -94,11 +93,11 @@ public abstract class Product {
 	public void setUrlImg(String urlImg) {
 		this.urlImg = urlImg;
 	}
+
 	@Override
 	public String toString() {
 		return "Product [id=" + id + ", name=" + name + ", price=" + price + ", stock=" + stock + ", infos=" + infos
 				+ ", urlImg=" + urlImg + "]";
 	}
-
 
 }

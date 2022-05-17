@@ -6,8 +6,6 @@ import com.formation.jpa.dal.FleurDao;
 import com.formation.jpa.dal.FleurDaoImpl;
 import com.formation.jpa.dal.PlanteDao;
 import com.formation.jpa.dal.PlanteDaoImpl;
-import com.formation.jpa.dal.ProductDao;
-import com.formation.jpa.dal.ProductDaoImpl;
 import com.formation.jpa.dal.SaisonDao;
 import com.formation.jpa.dal.SaisonDaoImpl;
 import com.formation.jpa.dal.StyleDao;

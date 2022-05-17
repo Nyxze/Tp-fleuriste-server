@@ -8,12 +8,9 @@ import javax.persistence.EntityTransaction;
 import com.formation.jpa.bean.Bouquet;
 import com.formation.jpa.util.DAOUtil;
 
+public class BouquetDaoImpl implements BouquetDao {
 
-
-public class BouquetDaoImpl implements BouquetDao{
-
-	
-	public void add(Bouquet s) throws Exception{
+	public void add(Bouquet s) throws Exception {
 		EntityManager em = DAOUtil.getEntityManager();
 		EntityTransaction et = em.getTransaction();
 		et.begin();
@@ -23,10 +20,12 @@ public class BouquetDaoImpl implements BouquetDao{
 		} catch (Exception e) {
 			et.rollback();
 			throw e;
+		} finally {
+			em.close();
 		}
 	}
 
-	public void delete(Bouquet s) throws Exception{
+	public void delete(Bouquet s) throws Exception {
 		EntityManager em = DAOUtil.getEntityManager();
 		EntityTransaction et = em.getTransaction();
 		Bouquet Bouquet = em.find(Bouquet.class, s.getId());
@@ -38,10 +37,12 @@ public class BouquetDaoImpl implements BouquetDao{
 			e.printStackTrace();
 			et.rollback();
 			throw e;
+		} finally {
+			em.close();
 		}
 	}
 
-	public  void update(Bouquet s) throws Exception{
+	public void update(Bouquet s) throws Exception {
 		EntityManager em = DAOUtil.getEntityManager();
 		EntityTransaction et = em.getTransaction();
 		et.begin();
@@ -53,8 +54,8 @@ public class BouquetDaoImpl implements BouquetDao{
 			throw e;
 		}
 	}
-	
-	public void update(List<Bouquet> listeBouquet) throws Exception{
+
+	public void update(List<Bouquet> listeBouquet) throws Exception {
 		EntityManager em = DAOUtil.getEntityManager();
 		EntityTransaction et = em.getTransaction();
 		et.begin();
@@ -62,30 +63,30 @@ public class BouquetDaoImpl implements BouquetDao{
 			for (Bouquet t : listeBouquet) {
 				em.merge(t);
 			}
-			
+
 			et.commit();
 		} catch (Exception e) {
 			et.rollback();
 			throw e;
+		} finally {
+			em.close();
 		}
 	}
-	
-	public Bouquet findById(int id){
+
+	public Bouquet findById(int id) {
 		EntityManager em = DAOUtil.getEntityManager();
 		Bouquet s = em.find(Bouquet.class, id);
 		em.close();
 		return s;
 	}
-	
+
 	@Override
-	public  List<Bouquet> findAll(){
+	public List<Bouquet> findAll() {
 		String req = "select Object(s) from Bouquet s";
 		EntityManager em = DAOUtil.getEntityManager();
-		List<Bouquet> liste = em
-				.createQuery(req, Bouquet.class)
-				.getResultList();
+		List<Bouquet> liste = em.createQuery(req, Bouquet.class).getResultList();
 		em.close();
-		
+
 		return liste;
 	}
 
