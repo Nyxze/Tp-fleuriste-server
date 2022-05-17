@@ -16,37 +16,39 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
 import com.formation.jpa.bean.Bouquet;
-import com.formation.jpa.bll.BouquetManager;
+import com.formation.jpa.bean.ShoppingCart;
 import com.formation.jpa.bll.ShoppingCartManager;
 
 
-@Path("/bouquets")
+@Path("/cart")
 @Singleton
-public class BouquetRs {
+public class ShoppingCartRs {
 
-	private BouquetManager bouquetManager;
+	private ShoppingCartManager shoppingCartManager;
 
-	public BouquetRs() {
-		bouquetManager = new BouquetManager();
+	public ShoppingCartRs() {
+		shoppingCartManager = new ShoppingCartManager();
 	}
+	
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<Bouquet> getAllBouquets() {
-		return bouquetManager.listeBouquets();
+	public List<ShoppingCart> getAllCart() {
+		return shoppingCartManager.listerCart();
 	}
+	
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Bouquet getOneBouquet(@PathParam("id") int id ) {
-		return bouquetManager.trouverBouquet(id);
+	public ShoppingCart getOneCart(@PathParam("id") int id ) {
+		return shoppingCartManager.trouverCart(id);
 	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
-	public void postBouquet(Bouquet b) {
+	public void postCart(ShoppingCart b) {
 		try {
-			bouquetManager.ajoutBouquet(b);
+			shoppingCartManager.creerCart(b);
 		} catch (Exception e) {
 			System.out.println(b.toString());
 			throw new WebApplicationException(Response.Status.CONFLICT);
@@ -55,9 +57,9 @@ public class BouquetRs {
 
 	@DELETE
 	@Path("/{id}")
-	public void removeBouquet(@PathParam("id") int id) {
+	public void removeCart(@PathParam("id") int id) {
 		try {
-			bouquetManager.supprimerBouquet(id);
+			shoppingCartManager.supprimerCart(id);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
@@ -66,10 +68,10 @@ public class BouquetRs {
 	@PUT
 	@Consumes(MediaType.APPLICATION_JSON)
 	@Path("/{id}")
-	public void putBouquet(Bouquet b, @PathParam("id") int id) {
+	public void putCart(ShoppingCart s, @PathParam("id") int id) {
 		try {
-			b.setId(id);
-			bouquetManager.modifierBouquet(b);
+			s.setId(id);
+			shoppingCartManager.modifierCart(s);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}

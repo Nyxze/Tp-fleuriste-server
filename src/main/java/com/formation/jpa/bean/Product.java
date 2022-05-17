@@ -18,7 +18,7 @@ public abstract class Product {
 	private int id;
 
 	private String name;
-	private float price;
+	private double price;
 
 	private int stock;
 	private String infos;
@@ -28,7 +28,7 @@ public abstract class Product {
 
 	}
 
-	public Product(String name, float price, int stock, String infos, String urlImg) {
+	public Product(String name, double price, int stock, String infos, String urlImg) {
 
 		this.name = name;
 		this.price = price;
@@ -37,7 +37,7 @@ public abstract class Product {
 		this.urlImg = urlImg;
 	}
 
-	public Product(int id, String name, float price, int stock, String infos, String urlImg) {
+	public Product(int id, String name, double price, int stock, String infos, String urlImg) {
 		this.id = id;
 		this.name = name;
 		this.price = price;
@@ -62,11 +62,11 @@ public abstract class Product {
 		this.name = name;
 	}
 
-	public float getPrice() {
+	public double getPrice() {
 		return price;
 	}
 
-	public void setPrice(float price) {
+	public void setPrice(double price) {
 		this.price = price;
 	}
 

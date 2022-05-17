@@ -24,29 +24,29 @@ import com.formation.jpa.bll.FleurManager;
 @Singleton
 public class FleurRs {
 
-	private FleurManager FleurManager;
+	private FleurManager fleurManager;
 
 	public FleurRs() {
-		FleurManager = new FleurManager();
+		fleurManager = new FleurManager();
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
 	public List<Fleur> getAllFleurs() {
-		return FleurManager.listeFleurs();
+		return fleurManager.listeFleurs();
 	}
 
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
 	public Fleur getOneFleur(@PathParam("id") int id ) {
-		return FleurManager.trouverFleur(id);
+		return fleurManager.trouverFleur(id);
 	}
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void postFleur(Fleur f) {
 		try {
-			FleurManager.ajoutFleur(f);
+			fleurManager.ajoutFleur(f);
 		} catch (Exception e) {
 			System.out.println(f.toString());
 			throw new WebApplicationException(Response.Status.CONFLICT);
@@ -57,7 +57,7 @@ public class FleurRs {
 	@Path("/{id}")
 	public void removeFleur(@PathParam("id") int id) {
 		try {
-			FleurManager.supprimerFleur(id);
+			fleurManager.supprimerFleur(id);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
@@ -69,7 +69,7 @@ public class FleurRs {
 	public void putFleur(Fleur f, @PathParam("id") int id) {
 		try {
 			f.setId(id);
-			FleurManager.modifierFleur(f);
+			fleurManager.modifierFleur(f);
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}

@@ -2,61 +2,67 @@ package com.formation.jpa.bll;
 
 import java.util.List;
 
-import com.formation.jpa.bean.Bouquet;
-import com.formation.jpa.dal.BouquetDao;
+import com.formation.jpa.bean.ShoppingCart;
+import com.formation.jpa.bean.Style;
+import com.formation.jpa.bean.Product;
+import com.formation.jpa.dal.ShoppingCartDao;
 import com.formation.jpa.exception.BeanException;
 import com.formation.jpa.util.DaoFactory;
 
 
-public class BouquetManager {
+public class ShoppingCartManager {
 
-	private BouquetDao dao;
+	private ShoppingCartDao dao;
 	
-	public BouquetManager(){
-		dao = DaoFactory.getBouquetDao();
+	public ShoppingCartManager(){
+		dao = DaoFactory.getShoppingCartDao();
 	}
 	
-	public List<Bouquet> listeBouquets(){
+	
+	public List<ShoppingCart> listerCart(){
 		return dao.findAll();
 	}
 	
 	
-	public Bouquet trouverBouquet(int id){
+	public ShoppingCart trouverCart(int id){
 		return dao.findById(id);
 	}
 
-	public void ajoutBouquet(Bouquet b) throws Exception{
+	public void creerCart(ShoppingCart s) throws Exception{
 		
-		if (b.getName() != null && !b.getName().trim().equals(""))
-			dao.add(b);
+		if (s.getListCartLine() != null && s.getListCartLine().size()>0)
+			dao.create(null);
 		else
-			throw new BeanException("Le Bouquet doit posséder un nom");
+			throw new BeanException("Le pannier doit contenir un produit");
 	}
 	
-	public void modifierBouquet(Bouquet b) throws Exception{
-		if (b.getName() != null && !b.getName().trim().equals(""))
-			dao.update(b);
+	public void modifierCart(ShoppingCart s) throws Exception{
+		if (s.getListCartLine() != null && s.getListCartLine().size()>0)
+			dao.update(s);
 		else
-			throw new BeanException("Le Bouquet doit posséder un nom");
+			throw new BeanException("Le style doit posséder un libellé");
 	}
 	
-	public void supprimerBouquet(Bouquet b) throws Exception{
-		dao.delete(b);
+	public void supprimerCart(ShoppingCart s) throws Exception{
+		dao.delete(s);
 	}
 	
-	public void supprimerBouquet(int id) throws Exception{
+	public void supprimerCart(int id) throws Exception{
 		System.out.println(id);
-		Bouquet b = dao.findById(id);
-		System.out.println(b.toString());
-		dao.delete(b);
+		ShoppingCart s = dao.findById(id);
+		System.out.println(s.toString());
+		dao.delete(s);
 	}
 	
-	public List<Bouquet> trier(String type){
-		List<Bouquet> liste = null;
+	public List<ShoppingCart> trier(String type){
+		List<ShoppingCart> liste = null;
 		switch (type){
 		default : liste = dao.findAll();
 		}
 		return liste;
 	}
+	
+	
+	
 	
 }
