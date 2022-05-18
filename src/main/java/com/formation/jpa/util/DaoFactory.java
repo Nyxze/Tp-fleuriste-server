@@ -8,8 +8,8 @@ import com.formation.jpa.dal.PlanteDao;
 import com.formation.jpa.dal.PlanteDaoImpl;
 import com.formation.jpa.dal.SaisonDao;
 import com.formation.jpa.dal.SaisonDaoImpl;
-import com.formation.jpa.dal.ShoppingCartDao;
-import com.formation.jpa.dal.ShoppingCartDaoImpl;
+import com.formation.jpa.dal.ShoppingCartItemDao;
+import com.formation.jpa.dal.ShoppingCartItemDaoImpl;
 import com.formation.jpa.dal.StyleDao;
 import com.formation.jpa.dal.StyleDaoImpl;
 
@@ -31,7 +31,7 @@ public class DaoFactory {
 		return new BouquetDaoImpl();
 	}
 
-	public static ShoppingCartDao getShoppingCartDao(){
-		return new ShoppingCartDaoImpl();
+	public static ShoppingCartItemDao getShoppingCartItemDao(){
+		return new ShoppingCartItemDaoImpl();
 	}
 }

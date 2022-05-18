@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,8 +18,13 @@ public class ShoppingCart {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id;
 
-	@OneToMany(targetEntity = ShoppingCartItem.class, cascade = CascadeType.ALL)
-	private List<ShoppingCartItem> listCartLine;
+	@OneToMany(targetEntity = ShoppingCartItem.class, cascade = CascadeType.ALL,fetch=FetchType.EAGER)
+	private List<ShoppingCartItem> listCartItem;
+
+	@Override
+	public String toString() {
+		return "ShoppingCart [id=" + id + ", listCartItem=" + listCartItem + "]";
+	}
 
 	public ShoppingCart() {
 	}
@@ -26,13 +32,13 @@ public class ShoppingCart {
 	public ShoppingCart(int id, List<ShoppingCartItem> listCartLine) {
 		super();
 		this.id = id;
-		this.listCartLine = listCartLine;
+		this.listCartItem = listCartLine;
 	}
 
 	@Transient
 	public Double getTotalCartPrice() {
 		double sum = 0D;
-		List<ShoppingCartItem> lineProduct = getListCartLine();
+		List<ShoppingCartItem> lineProduct = getListCartItem();
 		for (ShoppingCartItem cartItem : lineProduct) {
 			sum += cartItem.getLinePrice();
 		}
@@ -41,7 +47,7 @@ public class ShoppingCart {
 
 	@Transient
 	public int getNumberOfProducts() {
-		return this.listCartLine.size();
+		return this.listCartItem.size();
 	}
 
 	public int getId() {
@@ -52,12 +58,12 @@ public class ShoppingCart {
 		this.id = id;
 	}
 
-	public List<ShoppingCartItem> getListCartLine() {
-		return listCartLine;
+	public List<ShoppingCartItem> getListCartItem() {
+		return listCartItem;
 	}
 
-	public void setListCartLine(List<ShoppingCartItem> listCartLine) {
-		this.listCartLine = listCartLine;
+	public void setListCartItem(List<ShoppingCartItem> listCartLine) {
+		this.listCartItem = listCartLine;
 	}
 
 }

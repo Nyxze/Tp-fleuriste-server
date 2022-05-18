@@ -8,6 +8,9 @@ import javax.persistence.Inheritance;
 import javax.persistence.InheritanceType;
 import javax.persistence.Table;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonSubTypes.Type;
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "JoinedProductAbstract")
@@ -25,6 +28,7 @@ public abstract class Product {
 	private String urlImg;
 
 	public Product() {
+		System.out.println("Product constructor");
 
 	}
 

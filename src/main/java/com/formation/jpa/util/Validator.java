@@ -12,7 +12,7 @@ public class Validator {
 		
 	}
 	
-public static boolean  isValidPrice(float f) {
+public static boolean  isValidPrice(double f) {
 		
 		if(f< 0) {
 			return false;
@@ -21,7 +21,7 @@ public static boolean  isValidPrice(float f) {
 		
 		
 	}
-public static boolean  isValidStock(int q) {
+public static boolean  isValidStock(double q) {
 	
 	if(q<0) {
 		return false;

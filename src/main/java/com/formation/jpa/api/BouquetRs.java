@@ -17,7 +17,7 @@ import javax.ws.rs.core.Response;
 
 import com.formation.jpa.bean.Bouquet;
 import com.formation.jpa.bll.BouquetManager;
-import com.formation.jpa.bll.ShoppingCartManager;
+import com.formation.jpa.bll.ShoppingCartItemManager;
 
 
 @Path("/bouquets")
