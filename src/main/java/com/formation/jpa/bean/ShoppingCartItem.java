@@ -5,9 +5,12 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Transient;
 import javax.validation.constraints.NotNull;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 @Entity
 public  class ShoppingCartItem {
@@ -21,10 +24,22 @@ public  class ShoppingCartItem {
 
 	@NotNull
 	private int quantity;
+	
+	@JsonIgnore
+	@ManyToOne
+	@JoinColumn(name ="shoppingCart_Id", nullable=false)
+	private ShoppingCart shoppingCart;
 
 	public ShoppingCartItem() {
-		System.out.println("Default constructor");
 
+	}
+
+	public ShoppingCart getShoppingCart() {
+		return shoppingCart;
+	}
+
+	public void setShoppingCart(ShoppingCart shoppingCart) {
+		this.shoppingCart = shoppingCart;
 	}
 
 	public ShoppingCartItem(int id, Product product, @NotNull int quantity) {
@@ -40,12 +55,10 @@ public  class ShoppingCartItem {
 	}
 
 	public int getId() {
-		System.out.println("getId");
 		return id;
 	}
 
 	public void setId(int id) {
-		System.out.println("setId");
 		this.id = id;
 	}
 
@@ -54,8 +67,7 @@ public  class ShoppingCartItem {
 	}
 
 	public void setProduct(Product product) {
-		System.out.println("setProduct");
-		this.product = product;
+	this.product = product;
 	}
 
 	public int getQuantity() {
@@ -63,7 +75,7 @@ public  class ShoppingCartItem {
 	}
 
 	public void setQuantity(int quantity) {
-		System.out.println("setQuantity");
+	
 		this.quantity = quantity;
 	}
 

@@ -10,5 +10,12 @@ public interface BouquetDao {
 	public  void update(Bouquet s) throws Exception;
 	public Bouquet findById(int id);
 	public  List<Bouquet> findAll();
+	public double getPriceMax();
+	public double getPriceMin();
+	public List<Bouquet> findByQuerryParams(String search,double min,double max);
+	public List<Bouquet> findByQuerryParams(String search,double min,double max,int season,int style);
+	public List<Bouquet> findByQuerryParams(String search,double min,double max,int season, String params);
+
+
 
 }

@@ -12,8 +12,10 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.formation.jpa.bean.Bouquet;
 import com.formation.jpa.bean.Fleur;
@@ -74,4 +76,36 @@ public class FleurRs {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
 	}
+	
+	@GET
+	@Path("price/max")
+	@Produces(MediaType.APPLICATION_JSON)
+	public double getMaxPrice() {
+		return fleurManager.trouverPrixMax();
+	}
+
+	@GET
+	@Path("price/min")
+	@Produces(MediaType.APPLICATION_JSON)
+	public double getMinPrice() {
+		return fleurManager.trouverPrixMin();
+	}
+	
+	@GET
+	@Path("/query")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Fleur> getFleurByQuerryParams(@Context UriInfo info) {
+		String search = info.getQueryParameters().getFirst("search");
+		String min = info.getQueryParameters().getFirst("minPrice");
+		String max = info.getQueryParameters().getFirst("maxPrice");
+		String season = info.getQueryParameters().getFirst("season");
+		return fleurManager.trouverParQuerryParams(
+				search,
+				Double.parseDouble(min), 
+				Double.parseDouble(max),
+				Integer.parseInt(season)
+				);
+
+	}
+
 }

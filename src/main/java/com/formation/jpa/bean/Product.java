@@ -28,7 +28,6 @@ public abstract class Product {
 	private String urlImg;
 
 	public Product() {
-		System.out.println("Product constructor");
 
 	}
 

@@ -4,7 +4,10 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
+import com.formation.jpa.bean.Bouquet;
+import com.formation.jpa.bean.Fleur;
 import com.formation.jpa.bean.Plante;
 import com.formation.jpa.util.DAOUtil;
 
@@ -101,4 +104,63 @@ public class PlanteDaoImpl implements PlanteDao{
 		return liste;
 	}
 
+	public List<Plante> findByQuerryParams(String search, double min, double max) {
+		EntityManager em = DAOUtil.getEntityManager();
+		Query querry = em.createQuery(
+				"SELECT Object(p) from Plante p WHERE p.name like :search and p.price >= :min and p.price<=:max",
+				Plante.class);
+		querry.setParameter("search", "%" + search + "%");
+		querry.setParameter("min", min);
+		querry.setParameter("max", max);
+
+		List<Plante> liste = null;
+
+		try {
+			liste = querry.getResultList();
+			System.out.println("Querry réussi");
+		} catch (Exception e) {
+			e.printStackTrace();
+			System.out.println("error lors du findByQuerryParams");
+		}
+
+		return liste;
+
+	}
+
+	
+
+	@Override
+	public double getPriceMax() {
+
+		double max = 0d;
+		EntityManager em = DAOUtil.getEntityManager();
+		Query querry = em.createQuery("SELECT MAX(p.price) from Plante p");
+		try {
+			max = (double) querry.getSingleResult();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		em.close();
+
+		return max;
+	}
+
+	@Override
+	public double getPriceMin() {
+		double max = 0d;
+		EntityManager em = DAOUtil.getEntityManager();
+		Query querry = em.createQuery("SELECT MIN(p.price) from Plante p");
+		try {
+			max = (double) querry.getSingleResult();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		em.close();
+
+		return max;
+	}
 }

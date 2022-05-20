@@ -12,13 +12,14 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
 import com.formation.jpa.bean.Bouquet;
 import com.formation.jpa.bll.BouquetManager;
 import com.formation.jpa.bll.ShoppingCartItemManager;
-
 
 @Path("/bouquets")
 @Singleton
@@ -35,10 +36,11 @@ public class BouquetRs {
 	public List<Bouquet> getAllBouquets() {
 		return bouquetManager.listeBouquets();
 	}
+
 	@GET
 	@Path("/{id}")
 	@Produces(MediaType.APPLICATION_JSON)
-	public Bouquet getOneBouquet(@PathParam("id") int id ) {
+	public Bouquet getOneBouquet(@PathParam("id") int id) {
 		return bouquetManager.trouverBouquet(id);
 	}
 
@@ -74,6 +76,40 @@ public class BouquetRs {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
 	}
-	
-	
+
+	@GET
+	@Path("price/max")
+	@Produces(MediaType.APPLICATION_JSON)
+	public double getMaxPrice() {
+		return bouquetManager.trouverPrixMax();
+	}
+
+	@GET
+	@Path("price/min")
+	@Produces(MediaType.APPLICATION_JSON)
+	public double getMinPrice() {
+		return bouquetManager.trouverPrixMin();
+	}
+
+	@GET
+	@Path("/query")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Bouquet> getBouquetsByQuerryParams(@Context UriInfo info) {
+		String search = info.getQueryParameters().getFirst("search");
+		String min = info.getQueryParameters().getFirst("minPrice");
+		String max = info.getQueryParameters().getFirst("maxPrice");
+		String season = info.getQueryParameters().getFirst("season");
+		String style = info.getQueryParameters().getFirst("style");
+		System.out.println(style);
+		System.out.println(season);
+		return bouquetManager.trouverParQuerryParams(
+				search,
+				Double.parseDouble(min), 
+				Double.parseDouble(max),
+				Integer.parseInt(season),
+				Integer.parseInt(style)
+				);
+
+	}
+
 }

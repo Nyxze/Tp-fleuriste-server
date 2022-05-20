@@ -37,6 +37,10 @@ public class Bouquet extends Product {
 		this.style = style;
 	}
 	
+	@Override
+	public String toString() {
+		return "Bouquet [season=" + season + ", color=" + color + ", style=" + style + "]";
+	}
 	public Saison getSeason() {
 		return season;
 	}

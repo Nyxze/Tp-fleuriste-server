@@ -12,26 +12,36 @@ import com.formation.jpa.dal.ShoppingCartItemDao;
 import com.formation.jpa.dal.ShoppingCartItemDaoImpl;
 import com.formation.jpa.dal.StyleDao;
 import com.formation.jpa.dal.StyleDaoImpl;
+import com.formation.jpa.dal.UserDao;
+import com.formation.jpa.dal.UserDaoImpl;
 
 public class DaoFactory {
 
-	public static StyleDao getStyleDao(){
+	public static StyleDao getStyleDao() {
 		return new StyleDaoImpl();
 	}
-	public static SaisonDao getSaisonDao(){
+
+	public static SaisonDao getSaisonDao() {
 		return new SaisonDaoImpl();
 	}
-	public static FleurDao getFleurDao(){
+
+	public static FleurDao getFleurDao() {
 		return new FleurDaoImpl();
 	}
-	public static PlanteDao getPlanteDao(){
+
+	public static PlanteDao getPlanteDao() {
 		return new PlanteDaoImpl();
 	}
-	public static BouquetDao getBouquetDao(){
+
+	public static BouquetDao getBouquetDao() {
 		return new BouquetDaoImpl();
 	}
 
-	public static ShoppingCartItemDao getShoppingCartItemDao(){
+	public static ShoppingCartItemDao getShoppingCartItemDao() {
 		return new ShoppingCartItemDaoImpl();
+	}
+
+	public static UserDao getUserDao() {
+		return new UserDaoImpl();
 	}
 }

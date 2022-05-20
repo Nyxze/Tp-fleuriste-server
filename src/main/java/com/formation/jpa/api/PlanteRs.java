@@ -12,9 +12,12 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
+import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
+import javax.ws.rs.core.UriInfo;
 
+import com.formation.jpa.bean.Fleur;
 import com.formation.jpa.bean.Plante;
 import com.formation.jpa.bll.PlanteManager;
 
@@ -73,5 +76,36 @@ public class PlanteRs {
 		} catch (Exception e) {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
+	}
+	
+	@GET
+	@Path("price/max")
+	@Produces(MediaType.APPLICATION_JSON)
+	public double getMaxPrice() {
+		return planteManager.trouverPrixMax();
+	}
+
+	@GET
+	@Path("price/min")
+	@Produces(MediaType.APPLICATION_JSON)
+	public double getMinPrice() {
+		return planteManager.trouverPrixMin();
+	}
+	
+	@GET
+	@Path("/query")
+	@Produces(MediaType.APPLICATION_JSON)
+	public List<Plante> getPlantesByQuerryParams(@Context UriInfo info) {
+		String search = info.getQueryParameters().getFirst("search");
+		String min = info.getQueryParameters().getFirst("minPrice");
+		String max = info.getQueryParameters().getFirst("maxPrice");
+		System.out.println(max);
+		System.out.println(min);
+		return planteManager.trouverParQuerryParams(
+				search,
+				Double.parseDouble(min), 
+				Double.parseDouble(max)
+				);
+
 	}
 }

@@ -4,6 +4,7 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.EntityTransaction;
+import javax.persistence.Query;
 
 import com.formation.jpa.bean.Bouquet;
 import com.formation.jpa.util.DAOUtil;
@@ -89,5 +90,125 @@ public class BouquetDaoImpl implements BouquetDao {
 
 		return liste;
 	}
+
+	@Override
+	public double getPriceMax() {
+		double max = 0d;
+		EntityManager em = DAOUtil.getEntityManager();
+		Query querry = em.createQuery("SELECT MAX(b.price) from Bouquet b");
+		try {
+			max = (double) querry.getSingleResult();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+
+		em.close();
+		return max;
+	}
+
+	@Override
+	public double getPriceMin() {
+		double max = 0d;
+		EntityManager em = DAOUtil.getEntityManager();
+		Query querry = em.createQuery("SELECT MIN(b.price) from Bouquet b");
+		try {
+			max = (double) querry.getSingleResult();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+		}
+		em.close();
+
+		return max;
+	}
+
+	public List<Bouquet> findByQuerryParams(String search, double min, double max) {
+		EntityManager em = DAOUtil.getEntityManager();
+		Query querry = em.createQuery(
+				"SELECT Object(b) from Bouquet b WHERE b.name like :search and b.price >= :min and b.price<=:max",Bouquet.class);
+		querry.setParameter("search", "%" + search + "%");
+		querry.setParameter("min", min);
+		querry.setParameter("max", max);
+
+		List<Bouquet> liste = null;
+
+		try {
+			liste = querry.getResultList();
+			System.out.println("Querry réussi");
+
+		} catch (Exception e) {
+			e.printStackTrace();
+				System.out.println("error lors du findByQuerryParams default");
+			}
+
+		return liste;
+
+	}
+
+	@Override
+	public List<Bouquet> findByQuerryParams(String search, double min, double max, int season, int style) {
+		EntityManager em = DAOUtil.getEntityManager();
+		Query querry = em.createQuery(
+				"SELECT Object(b) from Bouquet b "
+				+ "WHERE b.name like :search "
+				+ "and b.price >= :min "
+				+ "and b.price<=:max "
+				+ "and b.style.id=:style "
+				+ "and b.season.id=:season",Bouquet.class);
+		querry.setParameter("search", "%" + search + "%");
+		querry.setParameter("min", min);
+		querry.setParameter("max", max);
+		querry.setParameter("season", season);
+		querry.setParameter("style", style);
+
+		List<Bouquet> liste = null;
+
+		try {
+			liste = querry.getResultList();
+			System.out.println("Querry réussi");
+		
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+				System.out.println("error lors du findByQuerryParams avec season et style");
+			}
+
+		return liste;
+
+	}
+
+	@Override
+	public List<Bouquet> findByQuerryParams(String search, double min, double max, int paramsId,String params) {
+		
+		EntityManager em = DAOUtil.getEntityManager();
+		Query querry = em.createQuery(
+				"SELECT Object(b) from Bouquet b "
+				+ "WHERE b.name like :search "
+				+ "and b.price >= :min "
+				+ "and b.price<=:max "
+				+ "and b."+params+".id=:params "
+				,Bouquet.class);
+		querry.setParameter("search", "%" + search + "%");
+		querry.setParameter("min", min);
+		querry.setParameter("max", max);
+		querry.setParameter("params", paramsId);
+
+		List<Bouquet> liste = null;
+
+		try {
+			liste = querry.getResultList();
+			System.out.println("Querry réussi");
+		
+		} catch (Exception e) {
+			e.printStackTrace();
+				System.out.println("error lors du findByQuerryParams withs params and paramId");
+			}
+
+		return liste;
+
+	};
 
 }
