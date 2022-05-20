@@ -1,5 +1,7 @@
 package com.formation.jpa.api;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import javax.inject.Singleton;
@@ -17,8 +19,11 @@ import javax.ws.rs.core.Context;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 
+import com.formation.jpa.bean.Product;
+import com.formation.jpa.bean.ShoppingCart;
 import com.formation.jpa.bean.ShoppingCartItem;
 import com.formation.jpa.bean.User;
+import com.formation.jpa.bll.ProductManager;
 import com.formation.jpa.bll.ShoppingCartItemManager;
 import com.formation.jpa.exception.BeanException;
 import com.formation.jpa.util.dto.ProductData;
@@ -28,54 +33,134 @@ import com.formation.jpa.util.dto.ProductData;
 public class ShoppingCartItemRs {
 
 	private ShoppingCartItemManager shoppingCartItemManager;
-	
+	private ProductManager productManager;
+
 	@Context
 	private HttpServletRequest httpRequest;
 
 	public ShoppingCartItemRs() {
 		shoppingCartItemManager = new ShoppingCartItemManager();
+		productManager = new ProductManager();
 	}
 
 	@GET
 	@Produces(MediaType.APPLICATION_JSON)
-	public List<ShoppingCartItem> getCartItems() throws BeanException  {
-		int shoppingCartId = 0;
-		try {
-			shoppingCartId = ((User) httpRequest.getSession().getAttribute("user")).getShoppingCart().getId();
-			
-		}catch(Exception e){
-			e.printStackTrace();
-			System.out.println("Problème lors de la récupération du user de la session");
+	public List<ShoppingCartItem> getCartItems() throws BeanException {
+
+		if (httpRequest.getSession().getAttribute("user") != null) {
+			int shoppingCartId = 0;
+			try {
+				shoppingCartId = ((User) httpRequest.getSession().getAttribute("user")).getShoppingCart().getId();
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Problème lors de la récupération du user de la session");
+			}
+
+			return shoppingCartItemManager.listCartItems(shoppingCartId);
+		} else {
+			ShoppingCart tempShoppingCart = new ShoppingCart();
+			try {
+				if (httpRequest.getSession().getAttribute("temp_cart") != null) {
+					tempShoppingCart = ((ShoppingCart) httpRequest.getSession().getAttribute("temp_cart"));
+					System.out.println(tempShoppingCart.toString());
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Problème lors de la récupération du temp_cart de la session");
+			}
+
+			return tempShoppingCart.getListCartItem();
+
 		}
 
-		return shoppingCartItemManager.listCartItems(shoppingCartId);
 	}
 
 	@POST
 	@Consumes(MediaType.APPLICATION_JSON)
 	public void postCartItem(ProductData productData) {
-		int shoppingCartId = 0;
-		try {
-			shoppingCartId = ((User) httpRequest.getSession().getAttribute("user")).getShoppingCart().getId();
-			System.out.println("SC ID:" + shoppingCartId);
-			shoppingCartItemManager.creerShoppingCartItem(productData,shoppingCartId);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WebApplicationException(Response.Status.CONFLICT);
+
+		if (httpRequest.getSession().getAttribute("user") != null) {
+			System.out.println("temp_cart == ??");
+			int shoppingCartId = 0;
+			try {
+				shoppingCartId = ((User) httpRequest.getSession().getAttribute("user")).getShoppingCart().getId();
+				System.out.println("SC ID:" + shoppingCartId);
+				shoppingCartItemManager.creerShoppingCartItem(productData, shoppingCartId);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new WebApplicationException(Response.Status.CONFLICT);
+			}
+
+		} else {
+			ShoppingCart tempShoppingCart = new ShoppingCart();
+
+			try {
+
+				if (httpRequest.getSession().getAttribute("temp_cart") == null) {
+//
+					System.out.println("temp_cart == null");
+					httpRequest.getSession().setAttribute("temp_cart", tempShoppingCart);
+					List<ShoppingCartItem> tempList = new ArrayList<>();
+					tempList.add(createShoppingCartItemForSession(productData));
+					tempShoppingCart.setListCartItem(tempList);
+					System.out.println(httpRequest.getSession().getAttribute("temp_cart"));
+
+				} else {
+					tempShoppingCart = ((ShoppingCart) httpRequest.getSession().getAttribute("temp_cart"));
+					List<ShoppingCartItem> cartItemList = tempShoppingCart.getListCartItem();
+					if (cartItemList.size() == 0) {
+						cartItemList.add(createShoppingCartItemForSession(productData));
+
+					} else {
+						System.out.println("NANI ??");
+						cartItemList = updateQuantity(cartItemList, productData);
+						cartItemList = addCartItem(cartItemList, productData);
+						System.out.println(cartItemList.toString());
+						tempShoppingCart.setListCartItem(cartItemList);
+					}
+
+				}
+
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Problème lors de la récupération du temp_cart de la session");
+			}
+
 		}
+
 	}
 
 	@DELETE
 	@Path("/{id}")
-	public void removeCartItem( @PathParam("id") int id) {
-		int shoppingCartId = 0;
-		try {
-			shoppingCartId = ((User) httpRequest.getSession().getAttribute("user")).getShoppingCart().getId();
-			shoppingCartItemManager.supprimerShoppingCartItemById(id,shoppingCartId);
-		} catch (Exception e) {
-			e.printStackTrace();
-			throw new WebApplicationException(Response.Status.CONFLICT);
+	public void removeCartItem(@PathParam("id") int id) {
+
+		if (httpRequest.getSession().getAttribute("user") != null) {
+			int shoppingCartId = 0;
+			try {
+				shoppingCartId = ((User) httpRequest.getSession().getAttribute("user")).getShoppingCart().getId();
+				shoppingCartItemManager.supprimerShoppingCartItemById(id, shoppingCartId);
+			} catch (Exception e) {
+				e.printStackTrace();
+				throw new WebApplicationException(Response.Status.CONFLICT);
+			}
+		} else {
+
+			ShoppingCart tempShoppingCart = new ShoppingCart();
+			try {
+				if (httpRequest.getSession().getAttribute("temp_cart") != null) {
+					tempShoppingCart = ((ShoppingCart) httpRequest.getSession().getAttribute("temp_cart"));
+					List<ShoppingCartItem> tempList = tempShoppingCart.getListCartItem();
+					tempList.removeIf(i -> i.getId() == id);
+					tempShoppingCart.setListCartItem(tempList);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.out.println("Problème lors de la récupération du temp_cart de la session");
+			}
+
 		}
+
 	}
 
 	@PUT
@@ -90,4 +175,56 @@ public class ShoppingCartItemRs {
 		}
 	}
 
+	@GET
+	@Path("/reset")
+	public void resetCart() {
+		if (httpRequest.getSession().getAttribute("temp_cart") != null) {
+			httpRequest.getSession().setAttribute("temp_cart", null);
+			httpRequest.getSession().invalidate();
+		}
+
+	}
+
+	private ShoppingCartItem createShoppingCartItemForSession(ProductData productData) {
+		ShoppingCartItem item = new ShoppingCartItem();
+		item.setId(productData.getId());
+		item.setQuantity(productData.getQuantity());
+		item.setProduct(productManager.trouverProduit(productData));
+
+		return item;
+	}
+
+	private List<ShoppingCartItem> updateQuantity(List<ShoppingCartItem> list, ProductData productData) {
+		List<ShoppingCartItem> tempList = new ArrayList<ShoppingCartItem>();
+		for (ShoppingCartItem shoppingCartItem : list) {
+			if (shoppingCartItem.getId() == productData.getId()) {
+				shoppingCartItem.setQuantity(productData.getQuantity());
+
+			}
+			tempList.add(shoppingCartItem);
+		}
+		System.out.println(tempList.toString());
+
+		return tempList;
+
+	}
+
+	
+
+	private List<ShoppingCartItem> addCartItem(List<ShoppingCartItem> list, ProductData productData) {
+
+		ArrayList<Integer> OnlyOne = new ArrayList<Integer>();
+
+		for (ShoppingCartItem scitem : list) {
+			OnlyOne.add(Integer.valueOf(scitem.getId()));
+		}
+		boolean ImCHECK = OnlyOne.contains(Integer.valueOf(productData.getId()));
+		if (!ImCHECK) {
+			list.add(createShoppingCartItemForSession(productData));
+		}
+
+		System.out.println(list.toString());
+		return list;
+
+	}
 }

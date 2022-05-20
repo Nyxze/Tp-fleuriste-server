@@ -54,13 +54,6 @@ public class ShoppingCartItemManager {
 	}
 
 
-	public List<ShoppingCartItem> trier(String type) {
-		List<ShoppingCartItem> liste = null;
-		switch (type) {
-		default:
-			liste = dao.findAll(1);
-		}
-		return liste;
-	}
+
 
 }

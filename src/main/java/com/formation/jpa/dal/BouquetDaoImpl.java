@@ -100,8 +100,7 @@ public class BouquetDaoImpl implements BouquetDao {
 			max = (double) querry.getSingleResult();
 
 		} catch (Exception e) {
-
-			e.printStackTrace();
+			System.out.println("error lors du getPriceMax");
 		}
 
 		em.close();
@@ -117,8 +116,7 @@ public class BouquetDaoImpl implements BouquetDao {
 			max = (double) querry.getSingleResult();
 
 		} catch (Exception e) {
-
-			e.printStackTrace();
+			System.out.println("error lors du getPriceMax");
 		}
 		em.close();
 

@@ -57,9 +57,8 @@ public class RegisterRs {
 			throw new WebApplicationException(Response.Status.CONFLICT);
 		}
 		
-		return httpRequest.getSession().getId();
+		return  ((User) httpRequest.getSession().getAttribute("user")).getRole().getName();
 	}
-	
 	@GET
 	@Path("/login")
 	@Produces(MediaType.APPLICATION_JSON)

@@ -70,7 +70,6 @@ public class FleurManager {
 
 	public List<Fleur> trouverParQuerryParams(String search, double min, double max, int season) {
 		if (season == 0) {
-
 			return dao.findByQuerryParams(search, min, max);
 		}
 
